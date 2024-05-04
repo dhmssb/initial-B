@@ -1,0 +1,18 @@
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# Environment variables file
+.env
+
+# Debug logs
+npm-debug.log
+
+# Ignore logs
+logs/
+*.log
+
+# IntelliJ IDEA directory
+.idea/
