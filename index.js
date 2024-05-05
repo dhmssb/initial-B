@@ -47,5 +47,7 @@ if (process.env.GENERATE_PEER_PORT === 'true') {
 const PORT = PEER_PORT || DEFAULT_PORT
 app.listen(PORT, () => {
     console.log(`listening at localhost:${PORT}`)
-    syncChains()
+    if (PORT !== DEFAULT_PORT) {
+        syncChains()
+    }
 })
