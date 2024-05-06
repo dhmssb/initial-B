@@ -9,6 +9,7 @@ node_modules/
 
 # Debug logs
 npm-debug.log
+.cache
 
 # Ignore logs
 logs/
