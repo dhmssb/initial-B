@@ -5,9 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --watchAll",
-    "start": "node index.js",
+    "start": "npm run build-client && node index.js",
     "dev-peer": "cross-env GENERATE_PEER_PORT='true' nodemon index.js",
-    "dev": "nodemon index.js"
+    "dev": "npm run dev-client & nodemon index.js",
+    "dev-redis": "npm run dev-client && npm run start-redis && nodemon index.js",
+    "start-redis": "redis-server --daemonize yes",
+    "build-client": "npm run clean && parcel build client/src/index.html --out-dir client/dist",
+    "dev-client": "npm run clean && parcel client/src/index.html --out-dir client/dist",
+    "clean": "rm -rf .cache client/dist"
   },
   "jest": {
     "testEnvironment": "node"
@@ -22,7 +27,10 @@
     "express": "^4.19.2",
     "hex-to-binary": "^1.0.1",
     "jest": "^29.7.0",
+    "parcel-bundler": "^1.12.5",
     "pubnub": "^8.0.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "redis": "^2.8.0",
     "request": "^2.88.2",
     "uuid": "^3.3.2"

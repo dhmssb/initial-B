@@ -2,6 +2,7 @@ const bodyParser = require('body-parser')
 const express = require('express')
 const request = require('request')
 const Blockchain = require('./blockchain')
+const path = require('path')
 const PubSub = require('./app/pubsub')
 const TransactionPool = require('./wallet/transaction-pool')
 const Wallet = require('./wallet')
@@ -20,6 +21,7 @@ const ROOT_NODE_ADDRESS = `http://localhost:${DEFAULT_PORT}`
 setTimeout(() => pubsub.broadcastChain(), 1000)
 
 app.use(bodyParser.json())
+app.use(express.static(path.join(__dirname, 'client/dist')))
 
 //TODO: move to routes
 app.get('/api/blocks', (req, res) => {
@@ -78,6 +80,10 @@ app.get('/api/wallet-info', (req, res) => {
     })
 })
 
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/dist/index.html'))
+})
+
 const syncWithRootState = () => {
     request({url: `${ROOT_NODE_ADDRESS}/api/blocks`}, (error, response, body) => {
         if (!error && response.statusCode === 200) {
@@ -97,6 +103,46 @@ const syncWithRootState = () => {
         }
     })
 }
+
+/*TODO: DELETE THIS LATER*/
+const walletDummy = new Wallet()
+const walletFake = new Wallet()
+
+const generateWalletTransaction = ({wallet, recipient, amount}) => {
+    const transaction = wallet.createTransaction({
+        recipient, amount, chain: blockchain.chain
+    })
+    transactionPool.setTransaction(transaction)
+}
+
+const walletAction = () => generateWalletTransaction(({
+    wallet, recipient: walletDummy.publicKey, amount: 15
+}))
+
+const walletDummyAction = () => generateWalletTransaction({
+    wallet: walletDummy, recipient: walletFake.publicKey, amount: 10
+})
+
+const walletFakeAction = () => generateWalletTransaction({
+    wallet: walletFake, recipient: wallet.publicKey, amount: 5
+})
+
+for (let i = 0; i < 10; i++) {
+    if (i % 3 === 0) {
+        walletAction();
+        walletDummyAction()
+    } else if (i % 3 === 1) {
+        walletAction()
+        walletFakeAction()
+    } else {
+        walletDummyAction()
+        walletFakeAction()
+    }
+
+    transactionMiner.mineTransactions()
+}
+
+
 let PEER_PORT
 
 if (process.env.GENERATE_PEER_PORT === 'true') {
