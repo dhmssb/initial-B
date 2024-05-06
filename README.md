@@ -2,7 +2,8 @@
 
 This is a technical test, but i make it a little different from the test
 
-i use to create a blockchain instead a wallet here
+i use to create a blockchain instead a wallet here and use Test Driven Development for this test
+
 for encode i just use hex from EC (elliptic crypro)
 
 ## Installation
@@ -19,6 +20,12 @@ for encode i just use hex from EC (elliptic crypro)
 
 ## Usage
 
+**To run test**
+```
+npm run test
+```
+
+
 **To run the code:**
 **with dev and you have redis global install just run**
 
@@ -34,5 +41,6 @@ npm dev-redis
 
 **To run the code:**
 **run with a peer**
-```npm run dev-peer
+```
+npm run dev-peer
 ```
