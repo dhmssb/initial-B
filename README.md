@@ -30,7 +30,7 @@ npm run test
 **with dev and you have redis global install just run**
 
 ```
-node run dev
+node run start
 ```
 
 **To run the code:**
